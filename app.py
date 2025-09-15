@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, url_for
 import re
 from datetime import timedelta
 
@@ -69,7 +69,8 @@ def generate():
         gap=gap,
         start=start,
         filename=filename,
-        success=f"Generated {len(chunks)} subtitle cues."
+        success=f"Generated {len(chunks)} subtitle cues.",
+        auto_scroll=True  # tells frontend to scroll to generator
     )
 
 @app.route("/download", methods=["POST"])
