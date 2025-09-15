@@ -149,8 +149,4 @@ footer a {
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
-footer a:hover {
-  color: #0d6efd;
-  transform: scale(1.2);
-}
 
