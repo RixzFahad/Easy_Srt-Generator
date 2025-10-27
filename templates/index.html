@@ -1,254 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SubtitleGen</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; color: #fff; background: #0f0f0f; line-height: 1.6; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SubtitleGen | RixZSrt</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        color: #fff;
+        background: #0f0f0f;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
 
-    /* Navbar */
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: #111; position: sticky; top: 0; z-index: 1000; }
-    nav .logo { font-size: 1.5rem; font-weight: bold; color: #8b5cf6; }
-    nav ul { display: flex; gap: 2rem; list-style: none; }
-    nav ul li a { text-decoration: none; color: #fff; font-weight: 500; transition: color 0.3s; }
-    nav ul li a:hover { color: #8b5cf6; }
+      /* Navbar */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
+        background: #111;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      }
+      nav .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #06b6d4;
+      }
+      nav ul {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      nav ul li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+      nav ul li a:hover {
+        color: #06b6d4;
+      }
 
-    /* Hero Section */
-    #hero { 
-      height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      background: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-      text-align: center; padding: 2rem; position: relative; transition: background-image 1s ease-in-out;
-    }
-    #hero::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
-    #hero h1, #hero p, #hero a { position: relative; z-index: 1; }
-    #hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-    #hero p { font-size: 1.2rem; margin-bottom: 2rem; }
-    #hero a { background: linear-gradient(90deg, #8b5cf6, #06b6d4); padding: 0.8rem 2rem; border-radius: 30px; text-decoration: none; color: #fff; font-weight: bold; transition: transform 0.3s; }
-    #hero a:hover { transform: scale(1.05); }
+      /* Hero Section */
+      #hero {
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url("https://images.unsplash.com/photo-1505685296765-3a2736de412f?auto=format&fit=crop&w=1600&q=80")
+          center/cover no-repeat;
+        text-align: center;
+        padding: 2rem;
+        position: relative;
+        transition: background-image 1s ease-in-out;
+      }
+      #hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+      }
+      #hero h1,
+      #hero p,
+      #hero a {
+        position: relative;
+        z-index: 1;
+      }
+      #hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px #06b6d4;
+      }
+      #hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        color: #d1d5db;
+      }
+      #hero a {
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        padding: 0.8rem 2rem;
+        border-radius: 30px;
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+      }
+      #hero a:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(6, 182, 212, 0.7);
+      }
 
-    /* Features Section */
-    #features, #countries { padding: 4rem 8%; background: #18181b; text-align: center; }
-    #features h2, #countries h2 { font-size: 2rem; margin-bottom: 2rem; }
-    .feature-cards, .country-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .card { background: #27272a; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: transform 0.3s, box-shadow 0.3s; }
-    .card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
-    .card i { font-size: 2.5rem; margin-bottom: 1rem; color: #06b6d4; }
+      /* Sections */
+      section {
+        position: relative;
+        z-index: 1;
+      }
 
-    /* Generator Section */
-    #generator {
-      padding: 4rem 8%;
-      background: url('https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=1600&q=80') 
-        center/cover fixed no-repeat;
-      position: relative;
-    }
-    #generator::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-    }
-    .generator-flex {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-    }
-    .generator-card {
-      flex: 1;
-      min-width: 320px;
-      background: rgba(20,20,30,0.9);
-      border: 2px solid rgba(139,92,246,0.4);
-      backdrop-filter: blur(12px);
-      border-radius: 1rem;
-      padding: 2rem;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .generator-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 35px rgba(0,0,0,0.9);
-    }
-    .generator-card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #8b5cf6;
-    }
-    textarea, select, input {
-      width: 100%;
-      padding: 0.8rem;
-      margin: 0.6rem 0;
-      border-radius: 10px;
-      border: 1px solid #333;
-      background: #1a1a1d;
-      color: #fff;
-    }
-    textarea { min-height: 140px; resize: vertical; }
-    button {
-      display: block;
-      margin-top: 1rem;
-      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
-      padding: 0.9rem 2.2rem;
-      border: none;
-      border-radius: 30px;
-      font-weight: bold;
-      font-size: 1rem;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    button:hover { transform: scale(1.05); }
-    pre {
-      background: #0a0a0a;
-      color: #0f0;
-      padding: 1rem;
-      border-radius: 10px;
-      max-height: 400px;
-      overflow: auto;
-    }
+      /* Features */
+      #features,
+      #countries {
+        padding: 4rem 8%;
+        background: #18181b;
+        text-align: center;
+      }
+      #features h2,
+      #countries h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: #06b6d4;
+        text-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+      }
+      .feature-cards,
+      .country-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+      .card {
+        background: #27272a;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+      }
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(6, 182, 212, 0.5);
+      }
+      .card i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #06b6d4;
+      }
 
-    /* About Section */
-    #about { padding: 5rem 8%; background: #111; text-align: center; }
-    #about h2 { font-size: 2rem; margin-bottom: 1.5rem; }
-    #about p { max-width: 750px; margin: auto; font-size: 1.15rem; color: #d1d5db; line-height: 1.8; }
+      /* Generator */
+      #generator {
+        padding: 4rem 8%;
+        background: url("https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=1600&q=80")
+          center/cover fixed no-repeat;
+        position: relative;
+      }
+      #generator::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+      }
+      .generator-flex {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+      }
+      .generator-card {
+        flex: 1;
+        min-width: 320px;
+        background: rgba(20, 20, 30, 0.9);
+        border: 2px solid rgba(139, 92, 246, 0.4);
+        backdrop-filter: blur(12px);
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .generator-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 35px rgba(6, 182, 212, 0.5);
+      }
+      .generator-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #8b5cf6;
+      }
+      textarea,
+      select,
+      input {
+        width: 100%;
+        padding: 0.8rem;
+        margin: 0.6rem 0;
+        border-radius: 10px;
+        border: 1px solid #333;
+        background: #1a1a1d;
+        color: #fff;
+      }
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+      button {
+        display: block;
+        margin-top: 1rem;
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        padding: 0.9rem 2.2rem;
+        border: none;
+        border-radius: 30px;
+        font-weight: bold;
+        font-size: 1rem;
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+      }
+      pre {
+        background: #0a0a0a;
+        color: #0f0;
+        padding: 1rem;
+        border-radius: 10px;
+        max-height: 400px;
+        overflow: auto;
+      }
 
-    /* Footer */
-    footer { padding: 2rem; background: #0a0a0a; text-align: center; font-size: 0.9rem; color: #aaa; }
+      /* About */
+      #about {
+        padding: 5rem 8%;
+        background: #111;
+        text-align: center;
+      }
+      #about h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: #06b6d4;
+        text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+      }
+      #about p {
+        max-width: 750px;
+        margin: auto;
+        font-size: 1.15rem;
+        color: #d1d5db;
+        line-height: 1.8;
+      }
 
-    /* Animations */
-    .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-  </style>
-</head>
-<body>
-  <!-- Navbar -->
-  <nav>
-    <div class="logo">🎬 RixZsrT</div>
-    <ul>
-      <li><a href="#hero">Home</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#countries">Languages</a></li>
-      <li><a href="#generator">Generator</a></li>
-      <li><a href="#about">About</a></li>
-    </ul>
-  </nav>
+      /* Contact */
+      #contact {
+        padding: 4rem 8%;
+        background: #0e0e10;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      #contact h2 {
+        font-size: 2rem;
+        margin-bottom: 1.2rem;
+        color: #8b5cf6;
+      }
+      #contact p {
+        color: #d1d5db;
+        max-width: 700px;
+        margin: auto;
+        font-size: 1.1rem;
+        line-height: 1.7;
+      }
+      .contact-links {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .contact-links a {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: #1a1a1d;
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        padding: 0.8rem 1.6rem;
+        border-radius: 50px;
+        color: #fff;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-weight: 500;
+      }
+      .contact-links a:hover {
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.6);
+        transform: translateY(-3px);
+      }
+      .contact-links a img {
+        width: 22px;
+        height: 22px;
+        transition: transform 0.3s;
+      }
+      .contact-links a:hover img {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 6px #8b5cf6);
+      }
 
-  <!-- Hero -->
-  <section id="hero" class="fade-in">
-    <h1>Generate Subtitles Instantly</h1>
-    <p>Boost your content reach with engaging and accurate subtitles for every platform.</p>
-    <a href="#generator">Try Now</a>
-  </section>
+      /* Footer */
+      footer {
+        padding: 2rem;
+        background: #0a0a0a;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #aaa;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
 
-  <!-- Features -->
-  <section id="features" class="fade-in">
-    <h2>Where Can You Use It?</h2>
-    <div class="feature-cards">
-      <div class="card"><i>▶️</i><h3>YouTube</h3><p>Boost reach with subtitles that improve engagement and accessibility.</p></div>
-      <div class="card"><i>📸</i><h3>Instagram</h3><p>Make reels more engaging with captions that keep viewers hooked.</p></div>
-      <div class="card"><i>📘</i><h3>Facebook</h3><p>Reach a wider audience with subtitles optimized for social media videos.</p></div>
-    </div>
-  </section>
+      /* Fade-in animation */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav>
+      <div class="logo">🎬 RixZsrT</div>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#countries">Languages</a></li>
+        <li><a href="#generator">Generator</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
 
-  <!-- Countries & Languages -->
-  <section id="countries" class="fade-in">
-    <h2>Supported Countries & Languages</h2>
-    <div class="country-cards">
-      <div class="card"><i>🌎</i><h3>Global Reach</h3><p>Supports multiple languages for worldwide creators.</p></div>
-      <div class="card"><i>🇯🇵</i><h3>Japanese</h3><p>Perfect for anime, J-dramas, and creators in Japan.</p></div>
-      <div class="card"><i>🇮🇳</i><h3>Hindi</h3><p>Expand content to one of the world’s largest audiences.</p></div>
-      <div class="card"><i>🇪🇸</i><h3>Spanish</h3><p>Engage millions of Spanish-speaking users globally.</p></div>
-    </div>
-  </section>
+    <!-- Hero -->
+    <section id="hero" class="fade-in">
+      <h1>Generate Subtitles Instantly</h1>
+      <p>
+        Boost your content reach with engaging and accurate subtitles for every
+        platform.
+      </p>
+      <a href="#generator">Try Now</a>
+    </section>
 
-  <!-- Generator -->
-  <section id="generator" class="fade-in">
-    <h2 style="text-align:center; margin-bottom:2rem; font-size:2.2rem;">✨ Generate Your Subtitles ✨</h2>
-    <div class="generator-flex">
-      
-      <!-- Form -->
-      <div class="generator-card">
-        <h3>📝 Your Script Paste</h3>
-        <form action="/generate" method="POST">
-          <textarea name="script" placeholder="Paste your script...">{{ script or "" }}</textarea>
-          <select name="split_mode">
-            <option value="auto" {% if split_mode=="auto" %}selected{% endif %}>Auto</option>
-            <option value="newlines" {% if split_mode=="newlines" %}selected{% endif %}>Sentence</option>
-            <option value="word" {% if split_mode=="word" %}selected{% endif %}>Word</option>
-          </select>
-          <input type="number" name="duration" placeholder="Duration (sec)" value="{{ duration or 2.5 }}">
-          <input type="number" name="gap" placeholder="Gap (ms)" value="{{ gap or 200 }}">
-          <input type="number" name="start" placeholder="Start (ms)" value="{{ start or 0 }}">
-          <input type="text" name="filename" placeholder="File Name" value="{{ filename or 'subtitles.srt' }}">
-          <button type="submit">⚡ Generate</button>
-        </form>
-        {% if error %}<p style="color:#ff4d4d;">{{ error }}</p>{% endif %}
-        {% if success %}<p style="color:#4dff91;">{{ success }}</p>{% endif %}
+    <!-- Features -->
+    <section id="features" class="fade-in">
+      <h2>Where Can You Use It?</h2>
+      <div class="feature-cards">
+        <div class="card">
+          <i>▶️</i>
+          <h3>YouTube</h3>
+          <p>
+            Boost reach with subtitles that improve engagement and
+            accessibility.
+          </p>
+        </div>
+        <div class="card">
+          <i>📸</i>
+          <h3>Instagram</h3>
+          <p>
+            Make reels more engaging with captions that keep viewers hooked.
+          </p>
+        </div>
+        <div class="card">
+          <i>📘</i>
+          <h3>Facebook</h3>
+          <p>
+            Reach a wider audience with subtitles optimized for social media
+            videos.
+          </p>
+        </div>
       </div>
+    </section>
 
-      <!-- Preview -->
-      <div class="generator-card">
-        <h3>👀 Preview</h3>
-        {% if srt_text %}
-          <pre>{{ srt_text }}</pre>
-          <form action="/download" method="POST">
-            <input type="hidden" name="srt_text" value="{{ srt_text }}">
-            <input type="hidden" name="filename" value="{{ filename }}">
-            <button type="submit">⬇ Download SRT</button>
+    <!-- Countries -->
+    <section id="countries" class="fade-in">
+      <h2>Supported Countries & Languages</h2>
+      <div class="country-cards">
+        <div class="card">
+          <i>🌎</i>
+          <h3>Global Reach</h3>
+          <p>Supports multiple languages for worldwide creators.</p>
+        </div>
+        <div class="card">
+          <i>🇯🇵</i>
+          <h3>Japanese</h3>
+          <p>Perfect for anime, J-dramas, and creators in Japan.</p>
+        </div>
+        <div class="card">
+          <i>🇮🇳</i>
+          <h3>Hindi</h3>
+          <p>Expand content to one of the world’s largest audiences.</p>
+        </div>
+        <div class="card">
+          <i>🇪🇸</i>
+          <h3>Spanish</h3>
+          <p>Engage millions of Spanish-speaking users globally.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generator -->
+    <section id="generator" class="fade-in">
+      <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.2rem">
+        ✨ Generate Your Subtitles ✨
+      </h2>
+      <div class="generator-flex">
+        <!-- Form -->
+        <div class="generator-card">
+          <h3>📝 Your Script Paste</h3>
+          <form action="/generate" method="POST">
+            <textarea
+              name="script"
+              placeholder="Paste your script..."
+            ></textarea>
+            <select name="split_mode">
+              <option value="auto">Auto</option>
+              <option value="newlines">Sentence</option>
+              <option value="word">Word</option>
+            </select>
+            <input
+              type="number"
+              name="duration"
+              placeholder="Duration (sec)"
+              value="2.5"
+            />
+            <input
+              type="number"
+              name="gap"
+              placeholder="Gap (ms)"
+              value="200"
+            />
+            <input
+              type="number"
+              name="start"
+              placeholder="Start (ms)"
+              value="0"
+            />
+            <input
+              type="text"
+              name="filename"
+              placeholder="File Name"
+              value="subtitles.srt"
+            />
+            <button type="submit">⚡ Generate</button>
           </form>
-        {% else %}
-          <p style="color:#bbb;">No preview yet. Generate subtitles to see them here!</p>
-        {% endif %}
+        </div>
+
+        <!-- Preview -->
+        <div class="generator-card">
+          <h3>👀 Preview</h3>
+          <p style="color: #bbb">
+            No preview yet. Generate subtitles to see them here!
+          </p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- About -->
-  <section id="about" class="fade-in">
-    <h2>About RixZSrt</h2>
-    <p>
-      RixZSrt is a free subtitle generator that helps creators quickly turn scripts into professional SRT files.  
-      Perfect for YouTubers, Instagram reel creators, and video editors worldwide.  
-      With a clean UI, multi-language support, and instant downloads — your content creation just got easier.
-    </p>
-  </section>
+    <!-- About -->
+    <section id="about" class="fade-in">
+      <h2>About RixZSrt</h2>
+      <p>
+        RixZSrt is a free subtitle generator that helps creators quickly turn
+        scripts into professional SRT files. Perfect for YouTubers, Instagram
+        reel creators, and video editors worldwide. With a clean UI,
+        multi-language support, and instant downloads — your content creation
+        just got easier.
+      </p>
+    </section>
 
-  <!-- Footer -->
-  <footer>
-    &copy; 2025 SubtitleGen. All Rights Reserved.
-  </footer>
+    <!-- Contact -->
+    <section id="contact" class="fade-in">
+      <h2>Contact & Services</h2>
+      <p>
+        Need help fixing your website, creating UI designs, or adding cool
+        features like this subtitle generator? DM me anytime or drop me a
+        message — I’ll be happy to help!
+      </p>
+      <div class="contact-links">
+        <a href="mailto:24khuntershorts@gmail.com" target="_blank">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/732/732200.png"
+            alt="Gmail"
+          />
+          <span>24khuntershorts@gmail.com</span>
+        </a>
+        <a
+          href="https://www.instagram.com/khan_fhd_04/?utm_source=ig_web_button_share_sheet"
+          target="_blank"
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+            alt="Instagram"
+          />
+          <span>@khan_fhd_04</span>
+        </a>
+      </div>
+    </section>
 
-  <!-- JS -->
-  <script>
-    // Fade-in animation
-    const elements = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.2 });
-    elements.forEach(el => observer.observe(el));
+    <!-- Footer -->
+    <footer>
+      &copy; 2025 RixZSrt — Crafted with ❤️ by Fahad Khan. All Rights Reserved.
+    </footer>
 
-    // Hero background slideshow
-    const hero = document.getElementById("hero");
-    const images = [
-      "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1505685296765-3a2736de412f?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=1600&q=80"
-    ];
-    let index = 0;
-    setInterval(() => {
-      index = (index + 1) % images.length;
-      hero.style.backgroundImage = `url('${images[index]}')`;
-    }, 5000);
+    <!-- JS -->
+    <script>
+      // Fade-in animation
+      const elements = document.querySelectorAll(".fade-in");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.2 }
+      );
+      elements.forEach((el) => observer.observe(el));
 
-    // Auto scroll to generator after generating
-    {% if auto_scroll %}
-      window.location.hash = "#generator";
-    {% endif %}
-  </script>
-</body>
+      // Hero background slideshow
+      const hero = document.getElementById("hero");
+      const images = [
+        "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1505685296765-3a2736de412f?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=1600&q=80",
+      ];
+      let index = 0;
+      setInterval(() => {
+        index = (index + 1) % images.length;
+        hero.style.backgroundImage = `url('${images[index]}')`;
+      }, 5000);
+    </script>
+  </body>
 </html>
