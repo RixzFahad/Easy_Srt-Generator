@@ -145,86 +145,306 @@
         color: #06b6d4;
       }
 
-      /* Generator */
+      /* REDESIGNED GENERATOR SECTION */
       #generator {
-        padding: 4rem 8%;
-        background: url("https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=1600&q=80")
-          center/cover fixed no-repeat;
+        padding: 5rem 5%;
+        background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
         position: relative;
+        min-height: 100vh;
       }
-      #generator::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.75);
+      
+      #generator h2 {
+        text-align: center;
+        margin-bottom: 3rem;
+        font-size: 2.5rem;
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
       }
-      .generator-flex {
-        position: relative;
-        z-index: 1;
+
+      .generator-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+      }
+
+      @media (max-width: 968px) {
+        .generator-container {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+      }
+
+      .gen-card {
+        background: rgba(30, 30, 45, 0.6);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        transition: all 0.4s ease;
+      }
+
+      .gen-card:hover {
+        border-color: rgba(139, 92, 246, 0.4);
+        box-shadow: 0 12px 48px rgba(139, 92, 246, 0.2),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .card-header {
         display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
       }
-      .generator-card {
-        flex: 1;
-        min-width: 320px;
-        background: rgba(20, 20, 30, 0.9);
-        border: 2px solid rgba(139, 92, 246, 0.4);
-        backdrop-filter: blur(12px);
-        border-radius: 1rem;
-        padding: 2rem;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
-        transition: transform 0.3s, box-shadow 0.3s;
+
+      .card-icon {
+        font-size: 1.8rem;
+        filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
       }
-      .generator-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 12px 35px rgba(6, 182, 212, 0.5);
-      }
-      .generator-card h3 {
+
+      .card-header h3 {
         font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: #8b5cf6;
+        color: #e0e0ff;
+        font-weight: 600;
       }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        color: #a0a0c0;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .form-group label span {
+        font-size: 1rem;
+      }
+
       textarea,
       select,
-      input {
+      input[type="number"],
+      input[type="text"] {
         width: 100%;
-        padding: 0.8rem;
-        margin: 0.6rem 0;
-        border-radius: 10px;
-        border: 1px solid #333;
-        background: #1a1a1d;
+        padding: 0.9rem 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        background: rgba(20, 20, 35, 0.8);
         color: #fff;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        font-family: 'Segoe UI', sans-serif;
       }
+
       textarea {
-        min-height: 140px;
+        min-height: 180px;
         resize: vertical;
+        font-family: 'Consolas', monospace;
+        line-height: 1.6;
       }
-      button {
-        display: block;
-        margin-top: 1rem;
-        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
-        padding: 0.9rem 2.2rem;
+
+      textarea:focus,
+      select:focus,
+      input:focus {
+        outline: none;
+        border-color: rgba(139, 92, 246, 0.6);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1),
+                    0 0 20px rgba(139, 92, 246, 0.2);
+        background: rgba(25, 25, 40, 0.9);
+      }
+
+      .input-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      @media (max-width: 600px) {
+        .input-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Buttons */
+      .btn-generate,
+      .btn-download {
+        width: 100%;
+        padding: 1rem 2rem;
         border: none;
-        border-radius: 30px;
-        font-weight: bold;
-        font-size: 1rem;
-        color: #fff;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.05rem;
         cursor: pointer;
-        transition: transform 0.3s, box-shadow 0.3s;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        margin-top: 1rem;
       }
-      button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+
+      .btn-generate {
+        background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
       }
-      pre {
-        background: #0a0a0a;
-        color: #0f0;
+
+      .btn-generate:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6);
+      }
+
+      .btn-generate:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .btn-generate:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn-download {
+        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+      }
+
+      .btn-download:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(6, 182, 212, 0.6);
+      }
+
+      .btn-download:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background: rgba(100, 100, 120, 0.3);
+      }
+
+      /* Loading spinner */
+      .btn-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Messages */
+      .message {
+        margin-top: 1rem;
         padding: 1rem;
         border-radius: 10px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        animation: slideIn 0.4s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message-error {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
+      }
+
+      .message-success {
+        background: rgba(6, 182, 212, 0.15);
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        color: #67e8f9;
+        animation: successGlow 0.6s ease;
+      }
+
+      @keyframes successGlow {
+        0%, 100% {
+          box-shadow: 0 0 0 rgba(6, 182, 212, 0);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        }
+      }
+
+      .checkmark {
+        display: inline-block;
+        animation: checkmarkPop 0.5s ease;
+      }
+
+      @keyframes checkmarkPop {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Preview textarea readonly styling */
+      textarea[readonly] {
+        background: rgba(10, 10, 20, 0.95);
+        border: 1px solid rgba(6, 182, 212, 0.15);
+        color: #a0d8e8;
+        font-family: 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        cursor: default;
+        min-height: 300px;
         max-height: 400px;
-        overflow: auto;
+      }
+      
+      textarea[readonly]::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      textarea[readonly]::-webkit-scrollbar-track {
+        background: rgba(20, 20, 30, 0.5);
+        border-radius: 10px;
+      }
+      
+      textarea[readonly]::-webkit-scrollbar-thumb {
+        background: rgba(6, 182, 212, 0.3);
+        border-radius: 10px;
+      }
+      
+      textarea[readonly]::-webkit-scrollbar-thumb:hover {
+        background: rgba(6, 182, 212, 0.5);
       }
 
       /* About */
@@ -393,7 +613,7 @@
         <div class="card">
           <i>🇮🇳</i>
           <h3>Hindi</h3>
-          <p>Expand content to one of the world’s largest audiences.</p>
+          <p>Expand content to one of the world's largest audiences.</p>
         </div>
         <div class="card">
           <i>🇪🇸</i>
@@ -403,59 +623,108 @@
       </div>
     </section>
 
-    <!-- Generator -->
+    <!-- REDESIGNED GENERATOR -->
     <section id="generator" class="fade-in">
-      <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.2rem">
-        ✨ Generate Your Subtitles ✨
-      </h2>
-      <div class="generator-flex">
-        <!-- Form -->
-        <div class="generator-card">
-          <h3>📝 Your Script Paste</h3>
-          <form action="/generate" method="POST">
-            <textarea
-              name="script"
-              placeholder="Paste your script..."
-            ></textarea>
-            <select name="split_mode">
-              <option value="auto">Auto</option>
-              <option value="newlines">Sentence</option>
-              <option value="word">Word</option>
-            </select>
-            <input
-              type="number"
-              name="duration"
-              placeholder="Duration (sec)"
-              value="2.5"
-            />
-            <input
-              type="number"
-              name="gap"
-              placeholder="Gap (ms)"
-              value="200"
-            />
-            <input
-              type="number"
-              name="start"
-              placeholder="Start (ms)"
-              value="0"
-            />
-            <input
-              type="text"
-              name="filename"
-              placeholder="File Name"
-              value="subtitles.srt"
-            />
-            <button type="submit">⚡ Generate</button>
+      <h2>✨ Generate Your Subtitles ✨</h2>
+
+      <div class="generator-container">
+        <!-- LEFT: Script Input -->
+        <div class="gen-card">
+          <div class="card-header">
+            <span class="card-icon">📝</span>
+            <h3>Script Input</h3>
+          </div>
+
+          <form id="generateForm" action="{{ url_for('generate') }}" method="post">
+            <div class="form-group">
+              <label><span>📄</span> Your Script</label>
+              <textarea
+                name="script"
+                placeholder="Paste your script here..."
+                required
+              >{{ script or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+              <label><span>✂️</span> Split Mode</label>
+              <select name="split_mode">
+                <option value="auto" {% if split_mode=='auto' %}selected{% endif %}>Auto</option>
+                <option value="sentences" {% if split_mode=='sentences' %}selected{% endif %}>Sentences</option>
+                <option value="newlines" {% if split_mode=='newlines' %}selected{% endif %}>Newlines</option>
+              </select>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label><span>⏱️</span> Duration (sec)</label>
+                <input type="number" step="0.1" name="duration" value="{{ duration or 2.5 }}" />
+              </div>
+
+              <div class="form-group">
+                <label><span>⏸️</span> Gap (ms)</label>
+                <input type="number" name="gap" value="{{ gap or 200 }}" />
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label><span>🎬</span> Start (ms)</label>
+                <input type="number" name="start" value="{{ start or 0 }}" />
+              </div>
+
+              <div class="form-group">
+                <label><span>💾</span> Filename</label>
+                <input type="text" name="filename" value="{{ filename or 'subtitles.srt' }}" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-generate" id="generateBtn">
+              <span class="btn-content">
+                <span id="btnText">Generate SRT</span>
+              </span>
+            </button>
           </form>
+
+          {% if error %}
+          <div class="message message-error">
+            <span>⚠️</span>
+            <span>{{ error }}</span>
+          </div>
+          {% endif %}
+
+          {% if success %}
+          <div class="message message-success">
+            <span class="checkmark">✓</span>
+            <span>{{ success }}</span>
+          </div>
+          {% endif %}
         </div>
 
-        <!-- Preview -->
-        <div class="generator-card">
-          <h3>👀 Preview</h3>
-          <p style="color: #bbb">
-            No preview yet. Generate subtitles to see them here!
-          </p>
+        <!-- RIGHT: Preview + Download -->
+        <div class="gen-card">
+          <div class="card-header">
+            <span class="card-icon">👁️</span>
+            <h3>Preview & Download</h3>
+          </div>
+
+          <form action="{{ url_for('download') }}" method="post">
+            <div class="form-group">
+              <label><span>📋</span> Generated SRT</label>
+              <textarea
+                readonly
+                name="srt_text"
+                placeholder="Your SRT will appear here after generation..."
+              >{{ srt_text or '' }}</textarea>
+            </div>
+
+            <input type="hidden" name="filename" value="{{ filename or 'subtitles.srt' }}" />
+
+            <button type="submit" class="btn-download" {% if not srt_text %}disabled{% endif %}>
+              <span class="btn-content">
+                <span>⬇️ Download .srt File</span>
+              </span>
+            </button>
+          </form>
         </div>
       </div>
     </section>
@@ -478,7 +747,7 @@
       <p>
         Need help fixing your website, creating UI designs, or adding cool
         features like this subtitle generator? DM me anytime or drop me a
-        message — I’ll be happy to help!
+        message — I'll be happy to help!
       </p>
       <div class="contact-links">
         <a href="mailto:24khuntershorts@gmail.com" target="_blank">
@@ -532,6 +801,18 @@
         index = (index + 1) % images.length;
         hero.style.backgroundImage = `url('${images[index]}')`;
       }, 5000);
+
+      // Loading animation for generate button
+      const generateForm = document.getElementById('generateForm');
+      const generateBtn = document.getElementById('generateBtn');
+      const btnText = document.getElementById('btnText');
+
+      if (generateForm) {
+        generateForm.addEventListener('submit', function() {
+          generateBtn.disabled = true;
+          btnText.innerHTML = '<span class="spinner"></span> Generating...';
+        });
+      }
     </script>
   </body>
 </html>

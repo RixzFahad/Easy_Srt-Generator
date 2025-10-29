@@ -16,12 +16,28 @@ def to_timestamp(ms: int) -> str:
     return f"{hours:02}:{minutes:02}:{seconds:02},{millis:03}"
 
 def split_text(text: str, mode: str = "auto") -> list[str]:
-    """Split the script into chunks."""
-    cleaned = re.sub(r"[ \t]+", " ", text.strip())
-    if mode == "newlines" or (mode == "auto" and "\n" in cleaned and cleaned.count("\n") >= 2):
-        return [p.strip() for p in cleaned.splitlines() if p.strip()]
-    parts = re.split(r"(?<=[.!?])\s+", cleaned)
-    return [p.strip() for p in parts if p.strip()]
+    """Split text into natural subtitle-sized chunks (6–10 words per line)."""
+    cleaned = re.sub(r"\s+", " ", text.strip())
+
+    # If user selected manual newline mode
+    if mode == "newlines":
+        return [line.strip() for line in cleaned.splitlines() if line.strip()]
+
+    # Split by sentence-ending punctuation
+    sentences = re.split(r'(?<=[.!?])\s+', cleaned)
+    chunks = []
+
+    for sentence in sentences:
+        words = sentence.split()
+        if len(words) <= 10:
+            chunks.append(sentence.strip())
+        else:
+            # Split long sentences into ~8-word parts
+            for i in range(0, len(words), 8):
+                part = " ".join(words[i:i + 8])
+                chunks.append(part.strip())
+
+    return [c for c in chunks if c]
 
 def generate_srt(chunks: list[str], duration_sec: float = 2.5, gap_ms: int = 200, start_ms: int = 0) -> str:
     """Generate SRT content from chunks and timing options."""
@@ -69,8 +85,7 @@ def generate():
         gap=gap,
         start=start,
         filename=filename,
-        success=f"Generated {len(chunks)} subtitle cues.",
-        auto_scroll=True  # tells frontend to scroll to generator
+        success=f"✅ Generated {len(chunks)} subtitle cues successfully!"
     )
 
 @app.route("/download", methods=["POST"])
